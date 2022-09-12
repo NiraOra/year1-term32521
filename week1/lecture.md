@@ -13,3 +13,32 @@
 - you start thinking like a computer scientist (look at problem, data needed, how to store it)
 - what combination
 - analyse behaviour/correctness
+
+### Pre conditions (pre-requisite knowledge)
+#
+- produce a correct C program
+- understand state-based model of computation
+- use fundamental C data structures (char, int, float, etc)
+- use fundamental control structures (if, while)
+- implement abstraction via function declarations, ADTs
+- fix simple bugs in incorrect programs
+- structs, pointers, malloc, linked lists
+
+### Post conditions
+#
+- analyse performance characteristics
+- measure performance behaviour
+- choose/develop effective data structures
+- package a set of DS+A as an abstract
+- etc.
+
+### Major themes
+#
+- analyse correctness !!!!
+
+### Schedule per week
+#
+- 4 hours per week
+- lectures contain
+  - summary of content
+  - problem solving exercises
