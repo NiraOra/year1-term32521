@@ -36,9 +36,19 @@
 #
 - analyse correctness !!!!
 
+
 ### Schedule per week
 #
 - 4 hours per week
 - lectures contain
   - summary of content
   - problem solving exercises
+ ```
+example code 
+ ``` 
+
+### Tutes and labs
+#
+- run from week 1 to 10
+- exercises for week x available in week x - 1
+- similar to comp1511
