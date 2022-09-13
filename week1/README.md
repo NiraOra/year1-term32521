@@ -166,7 +166,7 @@ Prints "1 4 7 10"
 
 ## Second Lesson
 #
-
+<i> code (under lectureCode(2)) </i>
 1. Compilation & Makefile
 2. Recursion
 
@@ -222,7 +222,34 @@ c': pre-processed version
 ### Makefiles
 #
 make command assists compilation by allowing:
-- progr ammers to document dependencies in code
+- programmers to document dependencies in code
 - minimal re-compilation, based on dependencies
 
 (header files have function definitions)
+
+- header files included in the "main" file so that the main.c won't complain (header files will make sure that the implementation is smoother)
+
+
+Here:
+> 1. gcc -c makes an executable file (Stack.o)
+> 2. gcc -c .o files makes a.out
+> 3. gcc -o ____ (output file name) .o files makes a file named _____
+
+These three steps can be condensed using Makefile.
+
+(makefile maintains timestamps, everything else)
+
+```
+rbt : brackets.o Stack.o
+	gcc -o rbt brackets.o Stack.o
+
+brackets.o : brackets.c Stack.h
+	gcc -Wall -Werror -c brackets.c
+
+Stack.o : Stack.c Stack.h
+	gcc -Wall -Werror -c Stack.c
+
+clean : 
+	rm -f *.o rbt 
+```
+(the exact descriptions are given in the makefile itself)
