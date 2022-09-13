@@ -264,3 +264,48 @@ $ make clean
 #
 <p>Makefiles can contain variables.</p>
 
+### Recursion
+#
+- Recursion is a pattern that calls itself
+- for example, n!
+- We can recursively define factorial function as f(n) = 1 [if n = 0]; f(n) = n * f(n - 1) [for others]
+
+### Recursive casse
+#
+- we call the same function for the problem with smaller size
+- decrease in a problem size will eventually lead to a "base case"
+
+```
+// return sum of list data fields using recursive call
+// linked list recursion
+
+int sum (struct node *head) {
+  if (head == NULL) {
+    return 0;
+  } 
+  return head->data + sum(head->next);
+
+  // sum(head->next): sum of rest of the list; calling the same function inside the function
+} 
+```
+
+Another example: last node
+
+```
+struct node *last (struct node *head) {
+  // list is empty
+  if (head == NULL) {
+    return NULL;
+  }
+
+  // found last node! return it
+  else if (head->next == NULL) {
+    return head;
+  }
+
+  // return last node from the rest of the list using recursion
+  else {
+    return last(head->next);
+  }
+}
+```
