@@ -163,3 +163,27 @@ seq 1 3 10
 Prints "1 4 7 10"
 
 - other exercises in the files
+
+## Second Lesson
+#
+
+1. Compilation & Makefile
+2. Recursion
+
+### Compilation and Makefiles
+#
+<p>Compilers are programs that convert program source code to executable form; (executable: machine code or bytecode) </p>
+
+1. GCC (gnu C compiler)
+  - applied source to source transformation (pre-processor)
+  - compiles source code to produce object files (ending with .o)
+  ```
+  example.o
+  ````
+  - links object files and libraries to produce executables
+
+2. clang (c lang)
+  - available in cse
+- dcc and 3c are wrapped around gcc/clang
+  
+
