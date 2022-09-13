@@ -187,3 +187,42 @@ Prints "1 4 7 10"
 - dcc and 3c are wrapped around gcc/clang
   
 
+> The compilers use something known as 'sanitizers'
+
+### Processes in Compilers
+#
+1. Pre Processing
+2. Compilation
+3. Linking
+
+example:
+
+> prog.c [source] (3 ways in compilation)
+> 1. gcc -E -> prog.c' -> step 2
+> 2. gcc -c -> prog.o (relocatable binary) -> step 3
+> 3. gcc -o -> prog (executable)
+
+Key:
+```
+-o: output
+.o: binary file
+-c: object file 
+-E: pre -processing
+c': pre-processed version
+```
+
+<u>Multiple C Files: </u>
+
+
+> 1. all .h and .c files -> gcc -c (compile)
+> 2. gcc -c -> .o files (relocatable binaries)
+> 3. .o files + .a files (system libraries) -> gcc -o
+> 4. gcc -o (link) -> a.out
+
+### Makefiles
+#
+make command assists compilation by allowing:
+- progr ammers to document dependencies in code
+- minimal re-compilation, based on dependencies
+
+(header files have function definitions)
