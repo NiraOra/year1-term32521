@@ -253,3 +253,14 @@ clean :
 	rm -f *.o rbt 
 ```
 (the exact descriptions are given in the makefile itself)
+
+(if you want to start from scratch, use the following code in the terminal:)
+```
+$ make clean
+```
+- whenever you write makefile code, always put tab character instead of spaces (as spaces give compilation error)
+
+### Makefiles and consistencies
+#
+<p>Makefiles can contain variables.</p>
+
