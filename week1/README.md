@@ -1,8 +1,4 @@
 ## First Lesson
-<p>
-- Each README.md is a lecture for the <b>WEEK</b> 
-</p>
-
 ### General stuff
 #
 
