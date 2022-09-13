@@ -197,19 +197,10 @@ Prints "1 4 7 10"
 
 example:
 
-> prog.c [source] (3 ways in compilation)
+> prog.c [source] (3 ways in compilation) [^2]
 > 1. gcc -E -> prog.c' -> step 2
 > 2. gcc -c -> prog.o (relocatable binary) -> step 3
 > 3. gcc -o -> prog (executable)
-
-Key:
-```
--o: output
-.o: binary file
--c: object file 
--E: pre -processing
-c': pre-processed version
-```
 
 <u>Multiple C Files: </u>
 
@@ -330,3 +321,11 @@ struct node *insertR (struct node *list, int value) {
 
 #
 [^1]: yo. i had an epiphany. the header file is just a substitution of whatever is meant to be on the top of the c file usually (like defining a function before int main,,, oh my god,,,)
+[^2]: Key:
+  ```
+  -o: output
+  .o: binary file
+  -c: object file 
+  -E: pre -processing
+  c': pre-processed version
+  ```
