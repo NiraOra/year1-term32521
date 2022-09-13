@@ -214,7 +214,7 @@ c': pre-processed version
 <u>Multiple C Files: </u>
 
 
-> 1. all .h and .c files -> gcc -c (compile)
+> 1. all .h[^1] and .c files -> gcc -c (compile)
 > 2. gcc -c -> .o files (relocatable binaries)
 > 3. .o files + .a files (system libraries) -> gcc -o
 > 4. gcc -o (link) -> a.out
@@ -309,3 +309,24 @@ struct node *last (struct node *head) {
   }
 }
 ```
+Another example:
+```
+// Insert a Node into an ordered list: recursive
+
+struct node *insertR (struct node *list, int value) {
+  if (list == NULL || list->data >= value) {
+    struct node *newHead = create_node(value, NULL);
+    newHead->next = list;
+    return newHead;
+
+    // alternatively, in one line
+    // return create_node(value, list);
+  }
+  list->next = insertR(list->next, value);
+
+  return list;
+}
+```
+
+#
+[^1]: yo. i had an epiphany. the header file is just a substitution of whatever is meant to be on the top of the c file usually (like defining a function before int main,,, oh my god,,,)
