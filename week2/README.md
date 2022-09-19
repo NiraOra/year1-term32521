@@ -1,8 +1,8 @@
-## Second Week
+## <b> Second Week </b>
 #
-## First lecture
+## <b> First lecture </b>
 #
-## Continuing from Recursion
+## <b> Continuing from Recursion </b>
 #
 
 - Deleting from list using Recursion:
@@ -44,9 +44,9 @@ void print_list_items(struct node *head) {
 }
 ```
 
-## Analysis of Algorithms
+## <b> Analysis of Algorithms </b>
 #
-### Binary Search
+### <b> Binary Search </b>
 #
 - For example, search for 61; number of elements N = 16.
 
@@ -58,7 +58,8 @@ Assumptions (finding 61 in an ordered list example):
 - General Pattern = N/2^k [^1]
 - This is the basis of binary search.
 
--> Search by ascending order of time taken to search:
+
+Search by ascending order of time taken to search:
 1. log(n)
 2. n
 3. n log(n)
@@ -68,7 +69,7 @@ Assumptions (finding 61 in an ordered list example):
 
 - it is wise to prioritise readability over performance when it comes to an algorithm (as readable code make it easier to read stuff)
 
-### Running Time
+### <b>Running Time </b>
 # 
 An algorithm is a step-by-step procedure
 - for solving a problem
@@ -81,7 +82,7 @@ Most algorithms map input to output
   - easier to analyse
   - crucial to many applications: finance, robotics, games, etc.
 
-### Empirical Analysis
+### <b> Empirical Analysis </b>
 #
 Process:
 1. Write program that implements an algorithm
@@ -96,14 +97,14 @@ Limitations to empirical analysis
 - results may not be indicative of running time on other inputs
 - same hardware and operating system must be used in order to compare two algorithms
 
-### Theoretical Analysis
+### <b>Theoretical Analysis </b>
 #
 - Uses high-level description of the algorithm instead of implementation ("pseudocode")
 - Characterises running time as a function of the input size, n
 - Takes into account all possible inputs
 - Allows us to evaluate the speed of an algorithm independent of the hardware/software environment
 
-### Pseudocode
+### <b> Pseudocode </b>
 #
 - useful if you don't know how to implement; write algorithm and then implement
 - More structured than English prose
@@ -127,7 +128,7 @@ arrayMax(A):
     return currentMax    
 ```
 
-### Primitive Operations
+### <b> Primitive Operations </b>
 #
 (like assigning a value and compare; etc)
 - Basic computations performed by an algorithm
@@ -150,13 +151,13 @@ arrayMax(A):
     Input array A of n integers
     Output maximum element of A
 
-    currentMax = A[0]             // [1]
+    currentMax = A[0]                // [1]
     for all i = 1..n-1 do
-        if A[i] > currentMax then        // [n + (n - 1)]
-            currentMax = A[i]  // [2(n - 1)]
+        if A[i] > currentMax then    // [n + (n - 1)]
+            currentMax = A[i]        // [2(n - 1)]
         end if
     end for
-    return currentMax    // [1]
+    return currentMax                // [1]
 
     Total = 5n - 2
 ```
@@ -170,7 +171,7 @@ arrayMax(A):
 - [n - 1] is max number of changes (estimating to worst case scenario)
 [^2]
 
-### Estimating Run Times
+### <b> Estimating Run Times </b>
 #
 From previous example; 
 
@@ -204,23 +205,23 @@ Example:
 Estimate running time: 
 ```
 matrixProduct(A,B):
-|  Input  n×n matrices A, B
-|  Output n×n matrix A·B
-|
-|  for all i=1..n do                         // 2n+1 (O(n))
-|  |  for all j=1..n do                         // n(2n+1) (n*O(n))
-|  |  |  C[i,j]=0                        // n2
-|  |  |  for all k=1..n do               n2(2n+1)
-|  |  |     C[i,j]=C[i,j]+A[i,k]·B[k,j]                    //n3·5
-|  |  |  end for
-|  |  end for
-|  end for
-|  return C                // 1
+   Input  n×n matrices A, B
+   Output n×n matrix A·B
+ 
+   for all i=1..n do               // 2n+1 (O(n))
+    for all j=1..n do              // n(2n+1) (n*O(n))
+        C[i,j]=0                   // n2
+        for all k=1..n do          // n2(2n+1)
+            C[i,j]=C[i,j]+A[i,k]·B[kj]                   //n3·5
+        end for
+      end for
+   end for
+   return C                        // 1
 
 ```
 - Total = 7$n^3$ + 4$n^2$ + 3n + 2
 
-### Big-Oh notation
+### <b> Big-Oh notation </b>
 #
 - Given functions f(n) and g(n), we say that
 
@@ -230,7 +231,7 @@ matrixProduct(A,B):
 - f(n) ≤ c·g(n)    ∀n ≥ n0
 
 
-### To find the Big - O function (recursion)
+### <b> To find the Big - O function (recursion) </b>
 #
 
 Example: function 2n + 10 is $O(n)$
@@ -257,7 +258,7 @@ A.
 - $n^2/2 + n/2$ (ignore constants and ignore n)
 - O($n^2$)
 
-### Asymptotic Analysis of Algorithms
+### <b> Asymptotic Analysis of Algorithms </b>
 #
 Asymptotic analysis of algorithms determines running time in big-Oh notation:
 - find worst-case number of primitive operations as a function of input size
@@ -316,7 +317,7 @@ prefixAverages2(X):
 - another example would be binary search (in slides 35 - 43 in Analysis of Algorithms)
     - basically need to see size reduction
 
-### Relatives of Big-Oh
+### <b> Relatives of Big-Oh </b>
 #
 1. big-Omega
 
@@ -345,7 +346,7 @@ Categories:
     - since ¼n2 is in Ω(n2) and O(n2)
 
 
-### Complexity Classes
+### <b> Complexity Classes </b>
 #
 Problems in Computer Science …
 
@@ -363,7 +364,7 @@ Computer Science jargon for difficulty:
 - non-computable … no algorithm can exist
 [^4]
 
-### General and Test Algorithms
+### <b> General and Test Algorithms </b>
 #
 In scenarios where
 
