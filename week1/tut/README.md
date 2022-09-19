@@ -83,3 +83,24 @@ switch(n) {
 
 }
 ```
+
+### Ternary Statement
+#
+
+```
+int ch = getchar();
+
+char *type;
+if (isdigit(ch)) {
+    type = "digit";
+} else {
+    type = "non-digit";
+}
+
+printf("'%c' is a %s\n", ch, type);
+
+// ternary statement
+
+type = isdigit(ch) ? "digit" : "non digit" ;
+
+```
