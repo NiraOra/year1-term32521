@@ -389,6 +389,10 @@ Generation is straightforward:
 Testing is also straightfoward:
 - check whether next number divides n exactly
 
+## Second Lecture
+#
+
+
 #
 [^1]: the general pattern depends on k, number of steps before the seach stops.
   $log{_2}{N}$ = k
