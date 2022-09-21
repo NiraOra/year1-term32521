@@ -513,9 +513,224 @@ Thus, subsetsum2 also is $O(2n)$.
 - but if you can find a polynomial algorithm for Subset Sum, 
   then any other NP-complete problem becomes P !
 
-## ADTs
+## <b>ADTs (Abstract Data Types)</b>
 #
+### Abstract Data Types
+#
+A data type is ...
 
+- a set of values   (atomic or structured values)
+- a collection of operations on those values
+
+An abstract data type is ... [^5]
+- an approach to implementing data types
+- separates interface from implementation [^6]
+- users of the ADT see only the interface
+- builders of the ADT provide an implementation
+<br>
+<br>
+> E.g. do you know what a $(FILE *)$ looks like? do you want/need to know?
+
+### DTs, ADTs, GADTs
+#
+We want to distinguish ...
+
+1. DT = (non-abstract) data type   (e.g. C strings)
+  - internals of data structures are visible   (e.g. char s[10];)
+
+2. ADT = abstract data type   (e.g. C files)
+- can have multiple instances   (e.g. Set a, b, c;)
+
+3. GADT = generic (polymorphic) 
+
+- abstract data type
+- can have multiple instances   (e.g. Set $\text{<int>}$ a, b, c;)
+- can have multiple types   (e.g. Set $\text{<int>}$ a; Set $\text{<char>}$ b;)
+- not available natively in the C language
+
+### Interface/ Implementation
+#
+ADT interface provides: (.h file)
+- a user-view of the data structure (e.g. FILE*)
+- function signatures (prototypes) for all operations
+- semantics of operations (via documentation)
+- a contract between ADT and its clients
+
+ADT implementation gives (.c file)
+- concrete definition of the data structures
+- definition of functions for all operations
+
+### Collections
+#
+Many of the ADTs we deal with ...
+
+- consist of a collection of items
+- where each item may be a simple type or an ADT
+- and items often have a key (to identify them)
+
+Collections may be categorised by ...
+- structure:   linear (list), branching (tree), cyclic (graph)
+- usage:   set, matrix, stack, queue, search-tree, dictionary, ...
+
+### Collection Structures
+#
+(draws in slide 5-8/30 in ADTs)
+- linear, cyclic or binary trees
+
+### Collections (cont.)
+#
+Typical operations on collections
+
+- create an empty collection
+- insert one item into the collection
+- remove one item from the collection
+- find an item in the collection
+- check properties of the collection (size,empty?)
+- drop the entire collection
+- display the collection
+
+### Example Set ADT
+#
+Set data type: collection of unique integer values.
+
+"Book-keeping" operations:
+
+```
+Set newSet() // create new empty set
+void dropSet(Set) // free memory used by set
+void showSet(Set) // display as {1,2,3...}
+```
+
+Assignment operations:
+
+```
+void readSet(FILE*,Set) // read+insert set values
+Set SetCopy(Set) // make a copy of 
+```
+
+Data-type operations:
+
+- ```void SetInsert (Set,int)``` ... add number into set
+- ```void SetDelete(Set,int)``` ... remove number from set
+- ```int SetMember(Set,int)``` ... set membership test
+- ```Set SetUnion(Set,Set)``` ... union
+- ```Set SetIntersect(Set,Set)``` ... intersection
+- ```int SetCard(Set)``` ... cardinality (#elements)
+
+> Note: union and intersection return a newly-created ```Set```
+
+### Set ADT interface 
+#
+> (also in the Set ADT from lectureCode(2) folder)
+
+```
+// Set.h ... interface to Set ADT
+
+#ifndef SET_H
+#define SET_H
+
+#include <stdio.h>
+#include <stdbool.h>
+
+typedef struct SetRep *Set;
+
+Set newSet();              // create new empty set
+void dropSet(Set);         // free memory used by set
+Set SetCopy(Set);          // make a copy of a set
+void SetInsert(Set,int);   // add value into set
+void SetDelete(Set,int);   // remove value from set
+bool SetMember(Set,int);   // set membership
+Set SetUnion(Set,Set);     // union
+Set SetIntersect(Set,Set); // intersection
+int SetCard(Set);          // cardinality
+void showSet(Set);         // display set on stdout
+void readSet(FILE *, Set); // read+insert set values
+
+#endif
+```
+
+1. Example set client: set of small odd numbers 
+
+```
+#include "Set.h"
+...
+Set s = newSet();
+
+for (int i = 1; i < 26; i += 2)
+    SetInsert(s,i);
+
+showSet(s); 
+putchar('\n');
+```
+
+Outputs:
+```
+{1,3,5,7,9,11,13,15,17,19,21,23,25}
+```
+
+2. Example: eliminating duplicates 
+
+```
+#include "Set.h"
+...
+// scan a list of items in a file
+int item;
+Set seenItems = newSet();
+FILE *in = fopen(FileName,"r");
+while (fscanf(in, "%d", &item) == 1) {
+   if (!SetMember(seenItems, item)) {
+      SetInsert(seenItems, item);
+      process item;
+   }
+}
+fclose(in);
+```
+
+### Set ADT Pre/Post conditions
+
+Each ```Set``` operation has well-defined semantics.
+
+Express these semantics in detail via statements of:
+- what conditions need to hold at start of function
+- what will hold at end of function (assuming successful)
+
+Could  implement condition-checking via  ```assert() ```s
+
+But only during the development/testing phase
+
+- ```assert()``` does not provide useful error-handling
+
+At the very least, implement as comments at start of functions.
+
+If x is a variable of type T, where T is an ADT
+  - $ptr(x)$ is the pointer stored in x
+  - $val(x)$ is the abstract value represented by *x
+  - $valid(T, x)$ indicates that
+    - the collection of values in *x  satisfies all constraints on "correct" values of type T
+  - $x'$ is the updated version of $x$ [^7]
+  - $res$ value returned by a function
+Can also use math/logic notation as used in pseudocode.
+
+
+3. Examples of defining pre-/post conditions
+
+```
+// pre:  true
+// post: valid(Set,res) and res = {}
+Set newSet() { ... }
+
+// pre:  valid(Set,s) and valid(int n)
+// post: n ?? s'
+void SetInsert(Set s, int n) { ... }
+
+// pre:  valid(Set,s1) and valid(Set,s2)
+// post: ?? n ?? res, n ?? s1 or n ?? s2
+Set SetUnion(Set s1, Set s2) { ... }
+
+// pre:  valid(Set,s)
+// post: res = |s|
+int SetCard(Set s)  { ... }
+```
 
 #
 [^1]: the general pattern depends on k, number of steps before the seach stops.
@@ -526,3 +741,17 @@ Thus, subsetsum2 also is $O(2n)$.
 [^3]: Beware: NP stands for "nondeterministic, polynomial time (on a theoretical Turing Machine)"
 
 [^4]: Computational complexity theory deals with different degrees of intractability
+
+[^5]: provide operations on new data types essentially
+
+  you create it essentially (to fit your own needs)
+
+  make sure the user does not need to look at the implementation; as long as it can be flexible and can be used
+
+  ie behaviour of the function does not change
+
+  also need to design interface
+
+[^6]: usually header files
+
+[^7]: $ptr(x') == ptr(x)$
