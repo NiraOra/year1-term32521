@@ -1,7 +1,5 @@
-## <b> Second Week </b>
-#
-## <b> First lecture </b>
-#
+# <b> Second Week </b>
+# <b> First lecture </b>
 ## <b> Continuing from Recursion </b>
 #
 
@@ -389,7 +387,133 @@ Generation is straightforward:
 Testing is also straightfoward:
 - check whether next number divides n exactly
 
-## Second Lecture
+# Second Lecture
+### Continuation of Generate and Test Algorithms
+#
+Example:
+```
+isPrime(n):
+  Input  natural number n
+  Output true if n prime, false otherwise
+
+  for all i=2..n-1 do      // generate
+    if n mod i = 0 then   // test
+     return false       // i is a divisor => n is not prime
+    end if
+  end for
+  return true              // no divisor => n is prime
+```
+- complexity of isPrime is O(n)
+- can be optimised: check only numbers between 2 and $\lfloor \sqrt{n} \rfloor \to O(\sqrt{n})$.
+
+<u>Example:</u>
+<br>
+<br>
+Q. Is there a subset S of these numbers with sum(S) = 1000?
+```
+34,  38,  39,  43,  55,  66,  67,  84,  85,  91,
+101, 117, 128, 138, 165, 168, 169, 182, 184, 186,
+234, 238, 241, 276, 279, 288, 386, 387, 388, 389
+```
+<u>General problem:</u>
+- given n integers and a target sum k
+- is there a subset that adds up to exactly k?
+
+<u> Generate and test approach: </u>
+
+```
+// Pseudocode 
+
+subsetsum(A,k):
+  Input  set A of n integers, target sum k
+
+  Output true if $Σ_(b∈B)b = k$ for some B ⊆ A
+      false otherwise
+
+  for each subset S⊆A do
+    if sum(S)=k then
+       return true
+    end if
+  end for
+  return false
+```
+
+1. How many subsets are there of n elements?
+2. How could we generate them?
+
+Given: a set of n distinct integers in an array A …
+
+- produce all subsets of these integers
+A method to generate subsets:
+- represent sets as n bits   (e.g. n=4, 0000, 0011, 1111 etc.)
+- bit i represents the i th input number
+- if bit i is set to 1, then A[i] is in the subset
+- if bit i is set to 0, then A[i] is not in the subset
+- e.g. if $A[\text{ }] == \{1,2,3,5\}$ then $0011$ represents $\{1,2\}$
+
+<u> Algorithm </u>
+
+```
+subsetsum1(A,k):
+  Input  set A of n integers, target sum k
+  Output true if Σb∈Bb=k for some B⊆A
+         false otherwise
+
+  for s=0..2n-1 do
+   if k = Σ(ith bit of s is 1) A[i] then
+       return true
+    end if
+  end for
+  return false
+```
+
+- Obviously, subsetsum1 is $O(2n)$.
+
+Alternative approach
+<br>
+
+<b> subsetsum2(A,n,k) </b>
+
+(returns true if any subset of A[0..n-1] sums to k; returns false otherwise)
+
+- if the nth value A[n-1] is part of a solution …
+then the first n-1 values must sum to k – A[n-1]
+- if the nth value is not part of a solution …
+then the first n-1 values must sum to k
+- base cases: k=0 (solved by {}); n=0 (unsolvable if k>0)
+
+```
+subsetsum2(A,n,k):
+  Input  array A, index n, target sum k
+  Output true if some subset of A[0..n-1] sums up to k
+         false otherwise
+
+  if k=0 then
+     return true   // empty set solves this
+  else if n=0 then
+     return false  // no elements => no sums
+  else
+     return subsetsum2(A,n-1,k-A[n-1]) ∨ subsetsum2(A,n-1,k)
+  end if
+```
+
+<u>Cost analysis: </u>
+
+- $C_i$ = #calls to subsetsum2() for array of length i
+- for best case, $C_n = C_{n-1}$    (why?)
+- for worst case, $Cn = 2·C_{n-1} \to C_n = 2n$
+
+Thus, subsetsum2 also is $O(2n)$.
+
+- Subset Sum is typical member of the class of NP-complete problems
+
+- intractable … only algorithms with exponential performance are known
+  - increase input size by 1, double the execution time
+  - increase input size by 100, it takes 2100 = 1,267,650,600,228,229,401,496,703,205,376 times as long to execute
+- but if you can find a polynomial algorithm for Subset Sum, 
+  then any other NP-complete problem becomes P !
+
+## ADTs
 #
 
 
