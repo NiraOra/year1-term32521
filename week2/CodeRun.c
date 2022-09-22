@@ -6,9 +6,13 @@ struct node {
   struct node *next;
 };
 
-struct node *fn(struct node *head);
+//struct node *fn(struct node *head);
+struct node *append(struct node *head, int value);
+struct node *create_node(int value);
 
 int main(int argc, char *argv[]) {
+  /*
+  Testing quiz 2 question 6
   struct node *new = malloc(sizeof(*new));
   struct node *newTwo = malloc(sizeof(*newTwo));
   struct node *newThree = malloc(sizeof(*newThree));
@@ -24,9 +28,16 @@ int main(int argc, char *argv[]) {
   newThree->next = newFour;
   newFour->next = newFive;
   newFive->next = NULL;
+  
+   //struct node *head = fn(new);
+  */
 
-  struct node *head = fn(new);
-  for (struct node *current = head; current != NULL; current = current->next) {
+  struct node *new = create_node(7);
+  struct node *newTwo = create_node(3);
+  new->next = newTwo;
+  new = append(new, 6);
+ 
+  for (struct node *current = new; current != NULL; current = current->next) {
     printf("%d ", current->data);
   }
   printf("\n");
@@ -35,7 +46,7 @@ int main(int argc, char *argv[]) {
 
 // reveres list; list2 is like a new head (2-> last node of the first), and the list2 is updated accordingly
 // quiz2 q6
-struct node *fn(struct node *head) {
+/*struct node *fn(struct node *head) {
   if (head == NULL) {
     return NULL;
   }
@@ -47,4 +58,24 @@ struct node *fn(struct node *head) {
   head->next = NULL;
   return list2;
 
+}*/
+
+// quiz 2 question 4
+struct node *append(struct node *list, int value) {
+  if (list == NULL) {
+    return create_node(value);
+  } else {
+    append(list->next, value);
+    return list;
+  }
 }
+
+struct node *create_node(int value) {
+  struct node *new = malloc(sizeof(*new));
+  new->data = value;
+  new->next = NULL;
+  return new;
+}
+
+
+
