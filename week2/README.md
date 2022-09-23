@@ -596,7 +596,7 @@ Set data type: collection of unique integer values.
 "Book-keeping" operations:
 
 ```
-Set newSet() // create new empty set
+Set newSet()  // create new empty set
 void dropSet(Set) // free memory used by set
 void showSet(Set) // display as {1,2,3...}
 ```
@@ -731,6 +731,268 @@ Set SetUnion(Set s1, Set s2) { ... }
 // post: res = |s|
 int SetCard(Set s)  { ... }
 ```
+### Sets as Unsorted Arrays
+#
+[concrete data structure in slide 18/30]
+
+1. Concrete data structure (in C):
+
+```
+#define MAXELEMS 1000
+
+// concrete data structure
+struct SetRep {
+    int elems[MAXELEMS];
+    int nelems;
+};
+```
+
+- Need to set upper bound on number of elements
+- Could do statically (as above) or dynamically
+```
+Set newSet(int maxElems) { .
+```
+
+2. Set creation:
+
+```
+// create new empty set
+Set newSet()
+{
+   Set s = malloc(sizeof(struct SetRep));
+   if (s == NULL) {
+      fprintf(stderr, "Insufficient memory\n");
+      exit(EXIT_FAILURE);
+   }
+   s->nelems = 0;
+   // assert(isValid(s));
+   return s;
+}
+```
+
+3. Checking membership:
+
+```
+// set membership test
+int SetMember(Set s, int n)
+{   
+   // assert(isValid(s));
+   int i; 
+   for (i = 0; i < s->nelems; i++)
+      if (s->elems[i] == n) return TRUE;
+   return FALSE;
+}
+```
+
+4. Costs for set operations on unsorted array:
+
+- card: read from struct;   constant cost   $O(1)$
+- member: scan list from start;   linear cost   $O(n)$
+- insert: duplicate check, add at end;   linear cost   $O(n)$
+- delete: find, copy last into gap;   linear cost  $O(n)$
+- union: copy s1, insert each item from s2;   quadratic cost   $O(nm)$
+- intersect: scan for each item in s1;   quadratic cost   $O(nm)$
+[^8]
+<br>
+
+Same data structure as for unsorted array.
+
+Differences in:
+
+- membership test ... can use binary search
+- insertion ... binary search and then shift up and insert
+- deletion ... binary search and then shift down
+
+Costs for set operations on sorted array:
+
+- card: read from struct;   $O(1)$
+- member: binary search;   $O(log n)$
+- insert: find, shift up, insert;   $O(n)$
+- delete: find, shift down;   $O(n)$
+- union: merge = scan s1, scan s2;   $O(n)$  (technically $O(n+m)$)
+- intersect: merge = scan s1, scan s2;   $O(n)$   (technically $O(n+m)$)
+
+### Sets as Linked Lists 
+#
+[example in slide 25/30]
+<br>
+
+1. Concrete data structure (in C):
+
+```
+typedef struct Node {
+   int  value;
+   struct Node *next;
+} Node;
+
+struct SetRep {
+   Node *elems;  // pointer to first node
+   Node *last;   // pointer to last node
+   int nelems;   // number of nodes
+};
+```
+
+2. Set creation:
+
+```
+// create new empty set
+Set newSet()
+{
+   Set s = malloc(sizeof(struct SetRep));
+   if (s == NULL) {...}
+   s->nelems = 0;
+   s->elems = s->last = NULL;
+   return s;
+}
+```
+
+3. Checking membership:
+
+```
+// set membership test
+int SetMember(Set s, int n)
+{
+   // assert(isValid(s));
+   Node *cur = s->elems;
+   while (cur != NULL) {
+      if (cur->value == n) return true;
+      cur = cur->next;
+   }
+   return false;
+}   
+```
+<br>
+
+4. Costs for set operations on linked list:
+
+- insert: duplicate check, insert at head;   $O(n)$
+- delete: find, unlink;   $O(n)$
+- member: linear search; $O(n)$
+- card: lookup; $O(1)$
+- union: copy s1, insert each item from s2; $O(nm)$
+- intersect: scan for each item in s1;   $O(nm)$
+[^9]
+
+> If we don't have nelems, card becomes O(n)
+
+
+[table of set implementations in slide 30].
+
+## Trees and Binary search trees
+#
+### Searching
+#
+Search is an extremely common application in computing
+
+- given a (large) collection of items and a key value
+- find the item(s) in the collection containing that key
+  - item = (key, val1, val2, …)  (i.e. a structured data type)
+  - key = value used to distinguish items  (e.g. student ID)
+
+>Applications:  Google,  databases, .....
+
+- Many approaches have been developed for the "search" problem
+
+- Different approaches determined by properties of data structures:
+  - arrays: linear, random-access, in-memory
+  - linked-lists: linear, sequential access, in-memory
+  - files: linear, sequential access, external
+
+> Search costs:
+[table in slide 2/45]
+
+Maintaining arrays and files in sorted order is costly.
+
+Search trees are efficient to search but also efficient to maintain.
+
+> Example: the following tree corresponds to the sorted array [2,5,10,12,14,17,20,24,29,30,31,32]:
+[example in slide 3/45]
+
+### Tree Data Structures
+#
+Trees are connected graphs
+
+- with nodes and edges (called links), but no cycles  (no "up-links")
+- each node contains a data value   (or key+data)
+- each node has links to ≤ k other child nodes   (k=2 in slide 4/45)
+
+Trees are used in many contexts, e.g.
+
+- representing hierarchical data structures (e.g. expressions)
+- efficient searching (e.g. sets, symbol tables, …)
+
+> Real-world example: organisational structure 
+> Real-world example: hierarchical file system  (e.g. Linux) 
+> Real-world example: structure of a typical book
+> Real-world example: a decision tree  
+[example in slide 6 - 9/45]
+
+A binary tree is either
+
+- empty   (contains no nodes)
+- consists of a node, with two subtrees
+  - node contains a value  (typically key+data)
+  - left and right subtrees are binary trees  (recursive)
+
+Other special kinds of tree
+
+- m-ary tree: each internal node has exactly m children
+- B-tree: each internal node has n/2 ≤ #children ≤ n
+- Ordered tree: all left values < root, all right values > root
+- Balanced tree: has ≅ minimal height for a given number of nodes
+- Degenerate tree: has ≅maximal height for a given number of nodes
+
+### Binary Search Trees
+#
+Binary search trees (or BSTs) are ordered trees
+
+- each node is the root of 0, 1 or 2 subtrees
+- all values in any left subtree are less than root
+- all values in any right subtree are greater than root
+- these properties applies over all nodes in the tree
+
+Level of node = path length from root to node
+
+Height (or depth) of tree = max path length from root to leaf 
+(root is the top of the tree (first circle) and leaf is the bottom most values).
+
+Some properties of trees ...
+
+- Ordered
+  - ∀ nodes: max(left subtree) < root < min(right subtree)
+- Perfectly-balanced tree
+  - ∀ nodes: abs(number_of_nodes(left subtree) - number_of_nodes(right subtree)) <= 1
+- Height-balanced tree
+  - ∀ nodes: abs(height(left subtree) - height(right subtree)) <= 1
+
+> Note:  time complexity of a balanced tree algorithm is typically O(height)
+
+Operations on BSTs:
+
+- ```insert(Tree,Item)``` … add new item to tree via key
+- ```delete(Tree,Key)``` … remove item with specified key from tree
+- `search(Tree,Key)` … find item containing key in tree
+- plus, "bookkeeping" … new(), free(), show(), …
+
+> Notes:
+<br>
+> - nodes contain Items; we generally show just Item.key
+<br>
+> - keys are unique   (not technically necessary)
+
+Examples of binary search trees: 
+- balanced trees
+- non-balanced trees
+(in slide 16/45)
+
+Shape of tree is determined by order of insertion.
+
+### Insertion into BSTs
+#
+
+Steps in inserting values into an initially empty BST 
+
+[Diagram:Pics/insert0.png]
 
 #
 [^1]: the general pattern depends on k, number of steps before the seach stops.
@@ -755,3 +1017,7 @@ int SetCard(Set s)  { ... }
 [^6]: usually header files
 
 [^7]: $ptr(x') == ptr(x)$
+
+[^8]: Assuming: s1 has n items, s2 has m items
+
+[^9]: Assume n = size of s1, m = size of s2
