@@ -994,6 +994,47 @@ Steps in inserting values into an initially empty BST
 
 [Diagram:Pics/insert0.png]
 
+Example:
+
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees/Pics/insert1.png)
+
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees/Pics/insert2.png)
+
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees/Pics/insert3.png)
+
+### Representing BSTs
+#
+Binary trees are typically represented by node structures
+
+where each node contains a value, and pointers to child nodes
+Most tree algorithms move down the tree.
+If upward movement needed, add a pointer to parent.
+[Diagram:Pics/tree-rep.png]
+
+Typical data structures for trees …
+
+```
+// a Tree is represented by a pointer to its root node
+typedef struct Node *Tree;
+
+// a Node contains its data, plus left and right subtrees
+typedef struct Node {
+   int  data;
+   Tree left, right;
+} Node;
+
+// some macros that we will use frequently
+#define data(node)  ((node)->data)
+#define left(node)  ((node)->left)
+#define right(node) ((node)->right)
+```
+
+Here we use a simple definition for `data` ... just a key
+
+Abstract data vs concrete data …
+
+
+
 #
 [^1]: the general pattern depends on k, number of steps before the seach stops.
   $log{_2}{N}$ = k
