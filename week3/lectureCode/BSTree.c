@@ -29,6 +29,7 @@ Tree newTree() {
 }
 
 // free memory associated with Tree
+// Like freeing linked list
 void freeTree(Tree t) {
    if (t != NULL) {
       freeTree(left(t));
@@ -56,9 +57,20 @@ void showTree(Tree t) {
 // compute height of Tree
 int TreeHeight(Tree t) {
 
-   // not yet implemented
+   if (t == NULL || (t->left == NULL && t->right == NULL)) {
+      return 0;
+   }
 
-   return -1;
+   // recurse for both right and left trees
+   int lh = TreeHeight(t->left);
+   int rh = TreeHeight(t->right);
+
+   // if the left side is bigger; return bigger length essentially
+   if (lh > rh) {
+      return (lh + 1);
+   } else {
+      return (rh + 1);
+   }
 }
 
 // count #nodes in Tree
