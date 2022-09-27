@@ -29,13 +29,13 @@ int main(int argc, char *argv[]) {
   //newFour->next = NULL;
   //newFive->next = NULL;
   
-   //struct node *head = fn(new);
+  struct node *head = fn(new);
   
 
   //struct node *new = NULL;
   //struct node *newTwo = create_node(3);
   //new->next = newTwo;
-  new = append(new, 7);
+  //new = append(new, 7);
  
   for (struct node *current = new; current != NULL; current = current->next) {
     printf("%d ", current->data);

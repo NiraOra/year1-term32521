@@ -56,7 +56,7 @@ void showTree(Tree t) {
 
 // compute height of Tree
 int TreeHeight(Tree t) {
-
+   // implementation of height of a tree
    if (t == NULL || (t->left == NULL && t->right == NULL)) {
       return 0;
    }
@@ -64,7 +64,17 @@ int TreeHeight(Tree t) {
    // recurse for both right and left trees
    int lh = TreeHeight(t->left);
    int rh = TreeHeight(t->right);
-
+   
+   // the code below is for checking if tree is balanced
+   /*if (lh == -1 || rh == -1) { return -1;}
+   
+   // both left and right sub trees are balanced
+   // check current code
+   int diff = abs(lh - rh);
+   if (diff > 1) {
+      return -1;
+   }
+   */
    // if the left side is bigger; return bigger length essentially
    if (lh > rh) {
       return (lh + 1);
