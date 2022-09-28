@@ -10,6 +10,7 @@ int main(int argc, char *argv[]) {
   //Testing quiz 2 question 6
   //assert(argc > 2);
   showCommand();
+  printf("Makefile works!! my god\n");
   /*if (argv[1] == QUIT) {
     exit(1);
   }*/
