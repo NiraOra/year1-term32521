@@ -185,3 +185,206 @@ TreeInsert(tree,item):
 |     return tree    // avoid duplicates
 |  end if
 ```
+
+### Tree Traversal
+#
+Iteration (traversal) on …
+
+- Lists … visit each value, from first to last
+- Graphs … visit each vertex, order determined by DFS/BFS/…
+
+For binary Trees, several well-defined visiting orders exist:
+- <b>preorder</b> (NLR) … visit root, then left subtree, then right subtree
+- <b>inorder</b> (LNR) … visit left subtree, then root, then right subtree
+- <b>postorder</b> (LRN) … visit left subtree, then right subtree, then root
+- <b>level-order</b> … visit root, then all its children, then all their children
+
+Consider "visiting" an expression tree like:
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees/Pics/tree1.png)
+
+- NLR:  + * 1 3 - * 5 7 9    (prefix-order: useful for building tree) 
+- LNR:  1 * 3 + 5 * 7 - 9    (infix-order: "natural" order) 
+- LRN:  1 3 * 5 7 * 9 - +    (postfix-order: useful for evaluation) 
+- Level:  + * - 1 3 * 9 5 7    (level-order: useful for printing tree)
+
+Traversals for the following tree:
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees/Pics/bigtree.png)
+
+- NLR (preorder):   20   10   5   2   14   12   17   30   24   29   32   31
+
+- LNR (inorder):   2   5   10   12   14   17   20   24   29   30   31   32
+
+- LRN (postorder):   2   5   12   17   14   10   29   24   31   32   30   20
+
+1. Pseudocode for NLR traversal
+
+```
+showBSTreePreorder(t):
+|  Input tree t
+|
+|  if t is not empty then
+|  |  print data(t)
+|  |  showBSTreePreorder(left(t))
+|  |  showBSTreePreorder(right(t))
+|  end if
+```
+
+- Recursive algorithm is very simple.
+
+- Iterative version less obvious ... requires a Stack.
+
+2. Pseudocode for NLR traversal (non-recursive)
+
+```
+showBSTreePreorder(t):
+|  Input tree t
+|
+|  push t onto new stack S
+|  while stack is not empty do
+|  |  t=pop(S)
+|  |  print data(t)
+|  |  if right(t) is not empty then
+|  |     push right(t) onto S
+|  |  end if
+|  |  if left(t) is not empty then
+|  |     push left(t) onto S
+|  |  end if
+|  end while
+```
+### Joining Two Trees
+#
+An auxiliary tree operation …
+
+Tree operations so far have involved just one tree.
+
+An operation on two trees:   ```t = TreeJoin(t1,t2)```
+
+- Pre-conditions:
+  - takes two BSTs; returns a single BST
+  - max(key(```t1```)) < min(key(```t2```))
+- Post-conditions:
+  - result is a BST (i.e. fully ordered)
+  - containing all items from ```t1``` and ```t2```
+
+Method for performing tree-join:
+
+  - find the min node in the right subtree (t2)
+  - replace min node by its right subtree  (possibly empty)
+  - elevate min node to be new root of both trees
+
+> Advantage: doesn't increase height of tree significantly
+
+> x ≤ height(```t```) ≤ x+1, where x = max(height(```t1```),height(```t2```))
+
+> Variation: choose deeper subtree; take root from there.  
+
+1. Joining two trees:
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees/Pics/join-op.png) [^1]
+
+<u>Implementation of tree-join:</u>
+
+```
+TreeJoin(t1,t2):
+|  Input  trees t1,t2
+|  Output t1 and t2 joined together
+|
+|  if t1 is empty then return t2
+|  else if t2 is empty then return t1
+|  else
+|  |  curr=t2, parent=NULL
+|  |  while left(curr) is not empty do     // find min element in t2
+|  |     parent=curr
+|  |     curr=left(curr)
+|  |  end while
+|  |  if parent≠NULL then
+|  |     left(parent)=right(curr)  // unlink min element from parent
+|  |     right(curr)=t2
+|  |  end if
+|  |  left(curr)=t1
+|  |  return curr                  // curr is new root
+|  end if
+```
+
+2. Example tree join:
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees/Pics/treeJoin.png)
+
+### Deletion From BSTs
+#
+Insertion into a binary search tree is easy.
+
+Deletion from a binary search tree is harder.
+
+Four cases to consider …
+
+- empty tree … new tree is also empty
+- zero subtrees … unlink node from parent
+- one subtree … replace by child
+- two subtrees … replace by successor, join two subtrees
+
+Cases: 
+
+1. item to be deleted is a leaf (zero subtrees)
+
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees/Pics/del-k.png)
+
+> Just delete the items
+
+2. : item to be deleted is a leaf (zero subtrees)
+
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees/Pics/del1-k.png)
+
+3. item to be deleted has one subtree
+
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees/Pics/del-p.png)
+
+> Replace the item by its only subtree
+
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees/Pics/del1-p.png)
+
+4. item to be deleted has two subtrees
+
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees/Pics/del0-m.png)
+
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees/Pics/del1-m.png)
+
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees/Pics/del-m.png)
+
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees/Pics/del2-m.png)
+
+
+> Version 1: right child becomes new root, attach left subtree to min element of right subtree <br>
+> Version 2: join left and right subtree
+
+- Pseudocode (version 2):
+```
+TreeDelete(t,item):
+|  Input  tree t, item
+|  Output t with item deleted
+|
+|  if t is not empty then          // nothing to do if tree is empty
+|  |  if item < data(t) then       // delete item in left subtree
+|  |     left(t)=TreeDelete(left(t),item)
+|  |  else if item > data(t) then  // delete item in left subtree
+|  |     right(t)=TreeDelete(right(t),item)
+|  |  else                         // node 't' must be deleted
+|  |  |  if left(t) and right(t) are empty then 
+|  |  |     new=empty tree                   // 0 children
+|  |  |  else if left(t) is empty then
+|  |  |     new=right(t)                     // 1 child
+|  |  |  else if right(t) is empty then
+|  |  |     new=left(t)                      // 1 child
+|  |  |  else
+|  |  |     new=TreeJoin(left(t),right(t))  // 2 children
+|  |  |  end if
+|  |  |  free memory allocated for t
+|  |  |  t=new
+|  |  end if
+|  end if
+|  return t
+```
+## (new topic)
+##
+
+
+#
+[^1]: Note: ```t2'``` may be less deep than ```t2```
