@@ -383,8 +383,118 @@ TreeDelete(t,item):
 |  return t
 ```
 ## (new topic)
-##
+## Function Pointers in C
+#
+(Mostly in Slides: giving just small notes)
+- memory addresses in the function
+- variables/paramanetres declared as:
+```typeOfReturnValye (*fp) (typeOfArgument) ```
 
+<u> Function Pointers Example: </u>
+
+- ```int square(int x)``` { return x *x;}
+- ```int timesTwo(int x)``` {return x*2;}
+- ```int (*fp)(int)```;
+- ```fp``` = ```&square```; <br> // fp points to the square function
+- ```int n = (*fp)(10)```; //call the square function with input 10
+- ```fp = timesTwo```; //works without the & //fp points to the timesTwo function
+- ```n = (*fp) (2);```
+- ```n = fp(2)``` //can also use normal function call //notation
+
+Higher-order Functions:
+- Functions that get other functions as arguments, or return functions as a result
+
+- Example: the function traverse takes a list and a function pointer (fp) as argument and applies the function to all nodes in the list
+
+- Another example: compare functions (here, there can be two compare functions with exactly opposite logics, but function pointers can help parse through the code in an efficient way).
+
+## Balancing Search Trees
+#
+### Balancing Binary Search Trees
+#
+Observation: order of insertion into a tree affects its height
+
+- worst case: keys inserted in ascending/descending order (effectively have a linked list, so search cost is O(n) )
+- best case (for at-leaf insertion): keys inserted in pre-order (tree height ⇒ search cost is O(log n) ; tree is balanced)
+- average case: keys inserted in random order (tree height ⇒ search cost is O(log n ); but cost ≥ best case)
+
+Goal: build binary search trees which have
+- minimum height ⇒ minimum worst case search cost
+
+Perfectly-balanced tree with N nodes has
+
+- ∀ nodes,  abs(#nodes(LeftSubtree) - #nodes(RightSubtree)) < 2
+- height of log2N ⇒ worst case search O(log N)
+
+Three strategies to improving worst case search in BSTs:
+- <b>randomise</b>  —  reduce chance of worst-case scenario occuring
+- <b>amortise</b>  —  do more work at insertion to make search faster
+- <b>optimise</b>  —  implement all operations with performance bounds
+
+### Operations for Rebalancing
+#
+To assist with rebalancing, we consider new operations:
+
+1. Left rotation
+  - move right child to root; rearrange links to retain order
+
+2. Right rotation
+  - move left child to root; rearrange links to retain order
+3. Insertion at root
+  - each new item is added as the new root node
+4. Partition
+  - rearrange tree around specified node  (push it to root)
+
+### Tree Rotation
+#
+Rotation operations:
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees2/Pics/left-right-rotation.png)
+> Note: tree is ordered,   t1  <  n2  <  t2  <  n1  <  t3
+
+Method for rotating tree T right:
+
+- n1 is current root; n2 is root of n1's left subtree
+- n1 gets new left subtree, which is n2's right subtree
+- n1 becomes root of n2's new right subtree
+- n2 becomes new root
+- n2's left subtree is unchanged
+
+> Left rotation: swap left/right in the above. <br>
+> Rotation requires simple, localised pointer rearrangemennts <br>
+> Cost of tree rotation: O(1)
+
+Example (right rotation):
+![](https://www.cse.unsw.edu.au/~cs2521/lecs/trees2/Pics/rotr.png)
+
+1. Algorithm for Right Rotation:
+```
+rotateRight(n1):
+|  Input  tree n1
+|  Output n1 rotated to the right
+|
+|  if n1 is empty ∨ left(n1) is empty then
+|     return n1
+|  end if
+|  n2= n1->left
+|  n1->left = n2->right 
+|  n2->right =n1
+|  return n2
+```
+
+2. Algorithm for Left Rotation:
+```
+rotateLeft(n2):
+|  Input  tree n2
+|  Output n2 rotated to the left
+|
+|  if n2 is empty ∨ right(n2) is empty then
+|     return n2
+|  end if
+|  n1=n2->right
+|  n2->right = n1->left
+|  n1->left = n2
+|  return n1
+```
 
 #
 [^1]: Note: ```t2'``` may be less deep than ```t2```
