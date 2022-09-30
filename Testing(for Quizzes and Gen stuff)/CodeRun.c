@@ -1,19 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "CodeRun.h"
-
+#include <string.h>
+#include <assert.h>
 
 #define QUIT 'q'
-#define QUIZ_QUESTION 'q_q'
+#define QUIZ_QUESTION 'Q'
 
 int main(int argc, char *argv[]) {
   //Testing quiz 2 question 6
-  //assert(argc > 2);
+  // assert(argc > 1);
   showCommand();
   printf("Makefile works!! my god\n");
-  /*if (argv[1] == QUIT) {
-    exit(1);
-  }*/
+  char quit;
+  printf("> ");
+  while (scanf(" %c", &quit) != -1) {
+    if (quit == QUIT) {
+      exit(1);
+    }
+    if (quit == QUIZ_QUESTION) {
+      chooseFromWeek();
+    }
+  }
+  
   struct node *new = malloc(sizeof(*new));
   struct node *newTwo = malloc(sizeof(*newTwo));
   struct node *newThree = malloc(sizeof(*newThree));
@@ -46,6 +55,17 @@ void showCommand() {
   printf("1. Quit: q\n");
   printf("2. Quiz Question: q_q\n");
   printf("3. Print: p\n");
+}
+
+void chooseFromWeek() {
+  printf("Choose From the following:\n");
+  printf("1. Week 2\n");
+  printf("2. Week 3\n");
+  printf("3. Week 4\n");
+  printf("4. Week 5\n");
+  printf("5. Week 7\n");
+  printf("6. Week 8\n");
+  printf("7. Week 9\n");
 }
 
 // reveres list; list2 is like a new head (2-> last node of the first), and the list2 is updated accordingly

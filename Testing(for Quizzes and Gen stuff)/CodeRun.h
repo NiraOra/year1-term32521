@@ -20,5 +20,7 @@ struct node *create_node(int value);
 void print(struct node *head);
 // 2.
 void showCommand();
+// 3.
+void chooseFromWeek();
 
 #endif
