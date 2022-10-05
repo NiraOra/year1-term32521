@@ -497,4 +497,4 @@ rotateLeft(n2):
 ```
 
 #
-[^1]: Note: ```t2'``` may be less deep than ```t2```
+[^1]: Note: ```t_2'``` may be less deep than ```t2```
