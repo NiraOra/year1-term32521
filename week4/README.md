@@ -403,5 +403,7 @@ Analysis of AVL trees:
 - may not be weight-balanced; subtree sizes may differ
 ![](https://www.cse.unsw.edu.au/~cs2521/lecs/avl/Pics/height-weight.png)
 
+[don't forget to watch the other lecture: 2-3-4 trees and graph basics and graph representations]
+
 #
 [^1]: Height/balance measures are ignored
