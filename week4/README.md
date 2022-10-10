@@ -990,6 +990,7 @@ Cost of operations:
 ### Comparison of Graph Representations
 [summary of operations in the last slide]
 
+
 #
 [^1]: Height/balance measures are ignored
 [^2]: We "normalise" edges so that e.g  (v < w) in all (v,w)
