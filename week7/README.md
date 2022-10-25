@@ -384,5 +384,296 @@ If you want the details ...
 And the background ...
 - Authoritative Sources in a Hyperlinked Environment https://dl.acm.org/doi/pdf/10.1145/324133.324140
 
+# Second Lecture
+## Minimum Spanning Trees
+### Minimum Spanning Trees
+Reminder: Spanning tree ST of graph G=(V,E)
+- spanning = all vertices, tree = no cycles
+- ST  is a subgraph of G   (G'=(V,E') where E' ⊆ E)
+- ST  is connected and acyclic
+
+Minimum spanning tree MST of graph G
+- MST  is a spanning tree of G
+- sum of edge weights is no larger than any other ST
+
+> Applications:
+> - Computer networks, Electrical grids, Transportation networks …
+
+Example:
+![](https://cgi.cse.unsw.edu.au/~cs2521/20T2/lecs/min-span-tree/Pics/mst-example.png)
+
+Problem: how to (efficiently) find MST for graph G ?
+
+One possible strategy:
+1. generate all spanning trees
+2. calculate total weight of each
+3. MST = ST with lowest total weight
+
+> Note that MST may not be unique
+> e.g. if all edges have same weight, then all STs are MSTs
+
+Brute force solution  (using generate-and-test strategy):
+```
+findMST(G):
+|  Input  graph G
+|  Output a minimum spanning tree of G
+|
+|  bestCost = ∞
+|  for all spanning trees t of G do
+|  |  if cost(t) < bestCost then
+|  |     bestTree=t
+|  |     bestCost=cost(t)
+|  |  end if
+|  end for
+|  return bestTree
+```
+
+> Not useful in general because #spanning trees is potentially large 
+> (e.g. $n^{n-2}$  for a complete graph with n  vertices)
+
+Simplifying assumption:
+- edges in G are not directed   (MST for digraphs is harder)
+
+If edges are not weighted
+- there is no real notion of minimum spanning tree
+
+The MST algorithms given apply to
+- weighted,  non-directional,  connected graphs
+
+
+### Kruskal's Algorithm
+
+One approach to computing MST for graph G with V  nodes:
+1. start with empty MST
+2. consider edges in increasing weight order
+   - add edge if it does not form a cycle in MST
+3. repeat until V-1 edges are added
+
+Critical operations:
+- iterating over edges in weight order
+- checking for cycles in a graph
+
+Execution trace of Kruskal's algorithm:
+![](https://cgi.cse.unsw.edu.au/~cs2521/20T2/lecs/min-span-tree/Pics/kruskal-trace.png)
+
+Pseudocode:
+```
+KruskalMST(G):
+|  Input  graph G with n nodes
+|  Output a minimum spanning tree of G
+|
+|  MST=empty graph
+|  sort edges(G) by weight
+|  for each e ∈ sortedEdgeList do
+|  |  MST = MST ∪ {e}  // add edge
+|  |  if MST has a cyle then
+|  |     MST = MST \ {e}  // drop edge 
+|  |  end if
+|  |  if MST has n-1 edges then
+|  |     return MST
+|  |  end if
+|  end for
+```
+Rough time complexity analysis …
+- sorting edge list is O(E·log E)
+- at least V  iterations over sorted edges
+- on each iteration …
+   - getting next lowest cost edge is O(1)
+   - checking whether adding it forms a cycle: cost = O(V2)
+
+Possibilities for cycle checking:
+- use DFS … too expensive?
+- could use Union-Find data structure [^2]
+
+
+### Prim's Algorithm
+
+Another approach to computing MST for graph G=(V,E):
+
+1. start from any vertex v and empty MST
+2. choose edge not already in MST to add to MST;  must be:
+   - incident on a vertex s  already connected to v  in MST
+   - incident on a vertex t  not already connected to v  in MST
+   - minimal weight of all such edges
+3. repeat until MST covers all vertices
+
+> Critical operations:
+> - checking for vertex being connected in a graph
+> - finding min weight edge in a set of edges
+
+Execution trace of Prim's algorithm (starting at s=0):
+![](https://cgi.cse.unsw.edu.au/~cs2521/20T2/lecs/min-span-tree/Pics/prim-trace.png)
+
+Pseudocode:
+```
+PrimMST(G):
+|  Input  graph G with n nodes
+|  Output a minimum spanning tree of G
+|
+|  MST=empty graph
+|  usedV={0}
+|  unusedE=edges(g)
+|  while |usedV| < n do
+|  |  find e=(s,t,w) ∈ unusedE such that {
+|  |     s ∈ usedV ∧ t ∉ usedV 
+|  |       ∧ w is min weight of all such edges
+|  |  }
+|  |  MST = MST ∪ {e}
+|  |  usedV = usedV ∪ {t}
+|  |  unusedE = unusedE \ {e}
+|  end while
+|  return MST
+```
+
+> Critical operation:  finding best edge
+
+Rough time complexity analysis …
+- V  iterations of outer loop
+- in each iteration, finding min-weighted edge …
+   - with set of edges is O(E) ⇒ O(V·E) overall
+   - with priority queue is O(log E) ⇒ O(V·log E) overall
+
+> Note:
+> - have seen stack-based (DFS) and queue-based (BFS) traversals
+> - using a priority queue gives another non-recursive traversal
+
+### Sidetrack: Priority Queues
+Some applications of queues require
+- items processed in order of "key"
+- rather than in order of entry (FIFO — first in, first out)
+
+Priority Queues (PQueues) provide this via:
+- ```join```: insert item into PQueue (replacing enqueue)
+- ```leave```: remove item with largest key (replacing dequeue)
+
+> Will discuss priority queues in more detail in another lesson
+
+### Other MST Algorithms
+1. Boruvka's algorithm ... complexity O(E·log V)
+- the oldest MST algorithm
+- start with V separate components
+- join components using min cost links
+- continue until only a single component
+
+2. Karger, Klein, and Tarjan ... complexity O(E)
+- based on Boruvka, but non-deterministic
+- randomly selects subset of edges to consider
+- for the keen, here's the paper [^3]describing the algorithm
+
+## Shortest Path Algorithms
+### Shortest Path
+Path = sequence of edges in graph G
+- p = (v0,v1,weight1), (v1,v2,weight2), …, (vm-1,vm,weightm)
+
+cost(path) = sum of edge weights along path
+
+Shortest path between vertices s and t
+- a simple path p(s,t) where s = first(p), t = last(p)
+- no other simple path q(s,t) has cost(q) < cost(p)
+
+> Assumptions: weighted digraph, no negative weights.
+> Applications:  navigation,  routing in data networks,  …
+
+Some variations on shortest path (SP) ...
+
+1. Source-target SP problem
+- shortest path from source vertex s  to target vertex t
+
+2. Single-source SP problem
+- set of shortest paths from source vertex s  to all other vertices
+
+3. All-pairs SP problems
+- set of shortest paths between all pairs of vertices s  and t
+
+
+### Single - Source Shortest Path (SSSP)
+Shortest paths from s  to all other vertices
+- ```dist[]``` V-indexed array of cost of shortest path from s
+- ```pred[]``` V-indexed array of predecessor in shortest path from s
+
+Example:
+![](https://cgi.cse.unsw.edu.au/~cs2521/20T2/lecs/shortest-path/Pics/sssp.png)
+
+
+### Edge Relaxation
+Assume:  ```dist[]``` and ```pred[]``` as above
+- but containing data for shortest paths discovered so far
+
+If we have ...
+- ```dist[v]``` is length of shortest known path from s  to v
+- ```dist[w]``` is length of shortest known path from s  to w
+- edge (v,w,weight)
+
+Relaxation updates data for w  if we find a shorter path from s  to w :
+- if  ```dist[v]+weight < dist[w]```  then
+   - update  ```dist[w]←dist[v]+weight  and  pred[w]←v```
+
+Relaxation along edge e = (v,w,3) :
+![](https://cgi.cse.unsw.edu.au/~cs2521/20T2/lecs/shortest-path/Pics/relaxation.png)
+
+
+### Dijkstra's Algorithm
+One approach to solving single-source shortest path …
+```
+dist[]  // array of cost of shortest path from s
+pred[]  // array of predecessor in shortest path from s
+vSet    // vertices whose shortest path from s is unknown
+
+dijkstraSSSP(G,source):
+|  Input graph G, source node
+|
+|  initialise all dist[] to ∞
+|  dist[source]=0
+|  initialise all pred[] to -1
+|  vSet=all vertices of G
+|  while vSet ≠ ∅ do
+|  |  find v ∈ vSet with minimum dist[v]
+|  |  for each (v,w,weight) ∈ edges(G) do
+|  |     relax along (v,w,weight)
+|  |  end for
+|  |  vSet=vSet \ {v}
+|  end while
+```
+
+### Tracing Dijkstra's Algorithm
+How Dijkstra's algorithm runs when source = 0:
+![](https://cgi.cse.unsw.edu.au/~cs2521/20T2/lecs/shortest-path/Pics/dijkstra-trace.png)
+
+### Analysis of Dijkstra's Algorithm
+Why Dijkstra's algorithm is correct ...
+
+<b> Hypothesis: </b>
+
+1. for visited s, dist[s] is shortest distance from source
+2. (*) for unvisited t, dist[t] is shortest distance from source via visited nodes
+
+Ultimately, all nodes are visited, so ...
+- $∀$ v,  dist[v] is shortest distance from source
+
+<b> Proof </b>
+Base case: no visited nodes, dist[source]=0, dist[s]=∞ for all other nodes
+
+Induction step:
+1. If s  is unvisited node with minimum dist[s], then dist[s]  is shortest distance from source to s:
+   - if ∃ shorter path via only visited nodes, then dist[s]  would have been updated when processing the predecessor of s on this path
+   - if ∃ shorter path via an unvisited node u, then dist[u] < dist[s], which is impossible if s  has min distance of all unvisited nodes
+2. This implies that (a) holds for s  after processing s
+3. (2. (*) ) still holds for all unvisited nodes t  after processing s:
+   - if ∃ shorter path via s  we would have just updated dist[t]
+   - if ∃ shorter path without s  we would have found it previously
+
+Time complexity analysis …
+
+Each edge needs to be considered once ⇒ O(E).
+
+Outer loop has O(V) iterations.
+
+Implementing ```"find s ∈ vSet with minimum dist[s]"```
+1. try all s∈vSet ⇒ cost = O(V) ⇒ overall cost = O(E + V2) = O(V2)
+2. using a PQueue to implement extracting minimum
+   - can improve overall cost to O(E + V·log V)
+
 #
 [^1]: Weights can be used in both directed and undirected graphs.
+[^2]: (see Sedgewick Ch.1)
+[^3]: https://cgi.cse.unsw.edu.au/~cs2521/20T2/lecs/min-span-tree/Karger95.pdf
