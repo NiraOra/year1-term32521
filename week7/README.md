@@ -485,6 +485,8 @@ Possibilities for cycle checking:
 - use DFS … too expensive?
 - could use Union-Find data structure [^2]
 
+> disjoint sets in which nodes have a value of -1 -> roots 
+> union of 4 and 8; 4 and 8 become one tree
 
 ### Prim's Algorithm
 
