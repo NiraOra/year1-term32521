@@ -1,0 +1,14 @@
+#!/bin/sh
+
+case $# in
+2) ;;
+*) echo "Usage: $0 ArraySize Distribution" ; exit 1 ;;
+esac
+
+N="$1"
+D="$2"
+for sort in i s b m q
+do
+	echo ./sorter $sort "$N" "$D"
+	./sorter $sort "$N" "$D" | grep '^#compare'
+done

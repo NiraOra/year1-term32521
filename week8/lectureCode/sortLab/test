@@ -1,0 +1,9 @@
+#!/bin/sh
+
+N=$1
+D=$2
+for sort in i s b m
+do
+	echo ./sorter $sort $N $D
+	./sorter $sort $N $D | grep '^#compare'
+done

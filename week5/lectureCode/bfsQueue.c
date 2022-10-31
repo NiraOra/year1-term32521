@@ -20,13 +20,13 @@ bool findPathBFS(Graph g, int nV, Vertex src, Vertex dest) {
       v = QueueDequeue(Q);
       Vertex w;
       for (w = 0; w < nV; w++)
-	 if (adjacent(g, v, w) && visited[w] == -1) {
-	    visited[w] = v;
-	    if (w == dest)
-	       return true;
-	    else
-	       QueueEnqueue(Q, w);
-	 }
+         if (adjacent(g, v, w) && visited[w] == -1) {
+            visited[w] = v;
+            if (w == dest)
+               return true;
+            else
+               QueueEnqueue(Q, w);
+         }
    }
    return false;
 }
