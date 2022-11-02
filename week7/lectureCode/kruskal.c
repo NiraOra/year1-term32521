@@ -31,11 +31,11 @@ Graph kruskal(Graph g, Edge sortedEdges[], int nV, int nE) {
       n++;
       Vertex v;
       for (v = 0; v < nV; v++)
-	 visited[v] = false;
-      if (dfsCycleCheck(mst, nV, e.v, e.v)) {    // cycle through node e.v?
-	 removeEdge(mst, e);
-	 n--;
-      }
+	      visited[v] = false;
+         if (dfsCycleCheck(mst, nV, e.v, e.v)) {    // cycle through node e.v?
+            removeEdge(mst, e);
+            n--;
+         }
    }
    return mst;
 }
