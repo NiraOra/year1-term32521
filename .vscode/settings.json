@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    ".tex": "pdf",
+    "stdio.h": "c"
+  },
+  "C_Cpp.errorSquiggles": "Disabled"
+}
