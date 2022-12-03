@@ -13,6 +13,7 @@ void depthFirstSearch(Graph g, int src) {
 	for (int i = 0; i < totalVertices; i++) {
 		visited[i] = -1;
 	}
+	
 	visited[src] = src;
 	for (int i = 0; i < totalVertices; i++) {
 		if (visited[i] != -1) {
